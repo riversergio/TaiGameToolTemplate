@@ -1,0 +1,159 @@
+@import _reset
+@import _var
+
+@mixin tablet_low_res
+    @media screen and (min-width: 480px) and (max-width: 767px)
+        @content
+
+@mixin tablet_portrait
+    @media screen and (min-width: 768px) and (max-width: 1023px)
+        @content
+
+@mixin desktop
+    @media screen and (min-width: 1024px) and (max-width: 1279px)
+        @content
+
+@mixin large_screen
+    @media screen and (min-width: 1280px)
+        @content
+
+*,*:before,*:after
+    box-sizing: border-box
+    -moz-box-sizing: border-box
+    -webkit-box-sizing: border-box
+    -ms-box-sizing: border-box
+
+html,body
+    margin: 0
+    height: 100%
+
+body
+    font-family: $body_font
+    font-size: $body_fontSize
+    line-height: $body_lineHeight
+    color: $body_textColor
+    font-weight: 300
+    background-color: #fafafa
+        
+
+a
+    transition: all .25s ease
+    -ms-transition: all .25s ease
+    -moz-transition: all .25s ease
+    -webkit-transition: all .25s ease
+    text-decoration: none
+    &:link,&:visited
+        color: $link_color
+    &:hover,&:focus
+        color: $link_hoverColor
+
+input
+    background-color: transparent
+    border: 1px solid rgba(0,0,0,.05)
+    padding: .5rem .75rem
+    outline: none
+    &:focus
+        border: 1px solid $link_color
+
+button
+    background-color: $link_color
+    color: #ffffff
+    padding: .5rem .75rem
+    border: none
+    font-weight: 300
+            
+.container
+    max-width: 100%
+    padding: 0 1rem
+
+.clearfix::after
+    content: ''
+    display: table
+    clear: both
+
+// Mobile Nav
+
+#mobile_search_form
+    position: relative
+    display: -moz-box
+    display: -webkit-flex
+    display: -webkit-box
+    display: -ms-flexbox
+    display: flex
+    flex-wrap: wrap
+    font-size: 14px
+    .form-input
+        flex: 1 auto
+        margin-right: .25rem
+        input
+            width: 100%
+            font-weight: 300
+
+#mobile-navigation
+    position: fixed
+    bottom: 0
+    left: 0
+    width: 100%
+    background-color: #ffffff
+    box-shadow: 0 -5px 5px rgb(0 0 0 / 2%)
+    display: block
+    @include desktop
+        display: none
+    @include large_screen
+        display: none
+    .nav-container
+        margin: 0
+        padding: 0
+        list-style: none
+        position: relative
+        display: -moz-box
+        display: -webkit-flex
+        display: -webkit-box
+        display: -ms-flexbox
+        display: flex
+        flex-wrap: wrap
+        .nav-item
+            flex: 0 calc(100% / 4)
+            display: block
+            &:not(:last-child)
+                border-right: 1px solid rgba(0,0,0,.05)
+            .nav-link
+                display: -moz-box
+                display: -webkit-flex
+                display: -webkit-box
+                display: -ms-flexbox
+                display: flex
+                flex-wrap: wrap
+                flex-direction: column
+                -webkit-box-align: center
+                -moz-box-align: center
+                -ms-flex-align: center
+                -webkit-align-items: center
+                align-items: center
+                padding: .5rem 0 .2rem
+                i
+                    font-size: 1.15rem
+                    margin: 0 0 .15rem
+                    display: block
+                .name
+                    font-size: 12px
+                    font-weight: 500
+            &.active
+                .nav-link
+                    background-color: $link_color
+                    color: #ffffff
+            .nav-item-holder
+                position: absolute
+                bottom: 100%
+                left: 0
+                right: 0
+                max-width: 100%
+                border-bottom: 1px solid rgba(0,0,0,.15)
+                padding: .25rem
+                background-color: #ffffff
+                box-shadow: 0 -5px 5px rgb(0 0 0 / 2%)
+                display: none
+                &.pullUp,&.pullDown
+                    display: block
+
+                

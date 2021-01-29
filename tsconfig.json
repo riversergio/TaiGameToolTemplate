@@ -1,0 +1,13 @@
+{
+    "compilerOptions": {
+        "module": "es2015",
+        "target": "es3",
+        "strictFunctionTypes": true,
+        "sourceMap": false,
+        "outDir": "./public/js"
+    },
+    "exclude": [
+        "node_modules",
+        "**/node_modules/*"
+    ]
+}

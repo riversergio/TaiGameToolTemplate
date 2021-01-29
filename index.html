@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./public/css/animation.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css"
+        integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w=="
+        crossorigin="anonymous" />
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,500;0,700;1,300;1,500;1,700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="./public/css/main.css">
+    <script src="./public/js/main.js" type="module"></script>
+</head>
+<body>
+    <!-- Mobile Nav -->
+    <nav id="mobile-navigation">
+        <ul class="nav-container">
+            <li class="nav-item">
+                <a class="nav-link" href="#">
+                    <i class="fas fa-home"></i>
+                    <span class="name">Trang chủ</span>
+                </a>
+            </li>
+            <li class="nav-item" id='toggleSearch'>
+                <a class="nav-link" href="#">
+                    <i class="fas fa-search"></i>
+                    <span class="name">Tìm kiếm</span>
+                </a>
+                <div class="nav-item-holder">
+                    <form action="/search" id="mobile_search_form">
+                        <div class="form-input">
+                            <input type="text" placeholder="Nhập tên app cần tìm tại đây..." name="q" class="search-input">
+                        </div>
+                        <button type="submit">Tìm kiếm</button>
+                    </form>
+                </div>
+            </li>
+            <li class="nav-item" id='toggleMenu'>
+                <a class="nav-link" href="#">
+                    <i class="fas fa-bars"></i>
+                    <span class="name">Menu</span>
+                </a>
+            </li>
+            <li class="nav-item" id='toggleContact'>
+                <a class="nav-link" href="#">
+                    <i class="fas fa-phone"></i>
+                    <span class="name">Liên Hệ</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <!-- Header -->
+    <header id="header-wrapper">
+        <div class="container">
+            <div class="clearfix">
+                <div id="header-brand">
+                    <a class="brand-logo" href="/">
+                        <img src="https://lh5.googleusercontent.com/proxy/jk1xNqOGlAAm9mUARa_A-HA8NeaerxLy6_fNDorcMNQ1AcENJFgCm7--3fZW4BDpwH_j" alt="Tai game top">
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+</body>
+</html>
