@@ -1,12 +1,28 @@
 var Utillity = /** @class */ (function () {
     function Utillity(elem) {
-        if (typeof elem === 'string') {
-            this.elem = Array.prototype.slice.call(document.querySelectorAll(elem));
-        }
-        else {
-            this.elem = elem;
+        var _this = this;
+        var flag = false; // Flag for checking if the next element is exist or not
+        var selectedObj = {
+            elem: typeof elem === 'string' ? document.querySelector(elem) : elem,
+            clickEvent: null
+        }; // Default value
+        Utillity.selectedElements.forEach(function (selected) {
+            if ((selected.elem === elem) && (selected.elem.innerHTML === elem.innerHTML)) {
+                for (var key in selectedObj)
+                    _this[key] = selected[key];
+                flag = true;
+                return false;
+            }
+        });
+        if (!flag) {
+            for (var key in selectedObj)
+                this[key] = selectedObj[key];
+            // Check if the selected element is Empty or not
+            Utillity.selectedElements.push(this);
         }
     }
+    // Methods
+    // Working with element attributes
     Utillity.prototype.attr = function (name, value) {
         if (!value) {
             return this.elem.getAttribute(name);
@@ -18,7 +34,7 @@ var Utillity = /** @class */ (function () {
     };
     Utillity.prototype.removeAttr = function (name) {
         this.elem.removeAttribute(name);
-        return this;
+        return this.elem;
     };
     Utillity.prototype.hasClass = function (className) {
         return this.elem.classList ? this.elem.classList.contains(className) : new RegExp('(^| )' + className + '( |$)', 'gi').test(this.elem.className);
@@ -67,10 +83,61 @@ var Utillity = /** @class */ (function () {
         }
         return this;
     };
-    Utillity.prototype.parent = function () {
-        this.elem = this.elem.parentElement;
+    // Working with DOM
+    Utillity.prototype.append = function (elem) {
+        this.elem.appendChild(elem);
         return this;
     };
+    Utillity.prototype.parent = function () {
+        return new Utillity(this.elem.parentElement);
+    };
+    Utillity.prototype.next = function () {
+        return new Utillity(this.elem.nextElementSibling);
+    };
+    Utillity.prototype.find = function (selector) {
+        var elem = this.elem.querySelectorAll(selector);
+        if (elem.length > 1) {
+            return Array.prototype.slice.call(elem);
+        }
+        else if (elem.length == 1) {
+            return new Utillity(elem[0]);
+        }
+        else {
+            return null;
+        }
+    };
+    Utillity.prototype.children = function (selector) {
+        var filtered = Array.prototype.slice.call(this.elem.children);
+        if (selector)
+            filtered = Array.prototype.slice.call(this.elem.querySelectorAll(":scope > " + selector));
+        if (filtered.length > 1) {
+            var res_1 = [];
+            filtered.forEach(function (item) { return res_1.push(new Utillity(item)); });
+            return res_1;
+        }
+        else if (filtered.length == 1) {
+            return new Utillity(filtered[0]);
+        }
+        else {
+            return null;
+        }
+    };
+    Utillity.prototype.clone = function () {
+        return new Utillity(this.elem.cloneNode(true));
+    };
+    // Event handlers
+    Utillity.prototype.on = function (event, callback) {
+        this.clickEvent = callback;
+        this.elem.addEventListener(event, this.clickEvent);
+    };
+    Utillity.prototype.off = function (event) {
+        if (event === 'click') {
+            this.elem.removeEventListener(event, this.clickEvent);
+        }
+    };
+    Utillity.selectedElements = []; // Store all of selected elements
     return Utillity;
 }());
-export { Utillity };
+export function _(selector) {
+    return new Utillity(selector);
+}

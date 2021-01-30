@@ -88,6 +88,8 @@ button
         input
             width: 100%
             font-weight: 300
+    button
+        cursor: pointer
 
 #mobile-navigation
     position: fixed
@@ -138,10 +140,6 @@ button
                 .name
                     font-size: 12px
                     font-weight: 500
-            &.active
-                .nav-link
-                    background-color: $link_color
-                    color: #ffffff
             .nav-item-holder
                 position: absolute
                 bottom: 100%
@@ -152,8 +150,55 @@ button
                 padding: .25rem
                 background-color: #ffffff
                 box-shadow: 0 -5px 5px rgb(0 0 0 / 2%)
-                display: none
-                &.pullUp,&.pullDown
-                    display: block
+                opacity: 0
+                visibility: hidden
+                transition: all .25s ease
+                -moz-transition: all .25s ease
+                -webkit-transition: all .25s ease
+                -ms-transition: all .25s ease
+            &.active
+                >.nav-link
+                    background-color: $link_color
+                    color: #ffffff
+                .nav-item-holder
+                    opacity: 1
+                    visibility: visible
+#mobile-menu
+    position: relative
+    overflow: hidden
+    .nav
+        margin: 0
+        padding: 0
+        display: -moz-box
+        display: -webkit-flex
+        display: -webkit-box
+        display: -ms-flexbox
+        display: flex
+        flex-wrap: wrap
+        .nav-item
+            flex: 1 calc(100% / 2)
+            padding: 0.5rem 1rem .5rem
+            &:not(:nth-child(1)):not(:nth-child(2))
+                border-top: 1px solid rgba(0,0,0,.05)
+            &:last-child
+                border-right: 1px solid rgba(0,0,0,.05)
+            .nav-link
+                flex-direction: row
+                -webkit-box-align: center
+                -moz-box-align: center
+                -ms-flex-align: center
+                -webkit-align-items: center
+                align-items: center
+                i
+                    font-size: 1.75rem
+                .name
+                    font-size: .95rem
+                    margin-left: 1rem
 
-                
+// Main Nav
+#main-menu
+    display: none
+    @include desktop
+        display: block
+    @include large_screen
+        display: block

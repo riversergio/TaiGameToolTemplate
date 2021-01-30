@@ -1,13 +1,29 @@
-export class Utillity {
-    elem: any;
+class Utillity {
+    static selectedElements: Array<Utillity> = []; // Store all of selected elements
+    elem: any; // Object element
+    clickEvent: any; // Click Event Store
     constructor(elem: any){
-        if(typeof elem === 'string'){
-            this.elem = Array.prototype.slice.call(document.querySelectorAll(elem));
-        }else{
-            this.elem = elem;
+        let flag:Boolean = false; // Flag for checking if the next element is exist or not
+        let selectedObj:Object = {
+            elem: typeof elem === 'string' ? document.querySelector(elem) : elem,
+            clickEvent: null
+        }; // Default value
+        Utillity.selectedElements.forEach(selected => {
+            if ((selected.elem === elem) && (selected.elem.innerHTML === elem.innerHTML)){
+                for (let key in selectedObj) this[key] = selected[key];
+                flag = true;
+                return false;
+            }
+        });
+        if(!flag){
+            for (let key in selectedObj) this[key] = selectedObj[key];
+            // Check if the selected element is Empty or not
+            Utillity.selectedElements.push(this);
         }
     }
-    attr(name:string, value?: string){
+    // Methods
+    // Working with element attributes
+    attr(name:string, value?: string):any {
         if(!value){
             return this.elem.getAttribute(name);
         }else{
@@ -15,14 +31,14 @@ export class Utillity {
             return this;
         }
     }
-    removeAttr(name:string){
+    removeAttr(name:string):Utillity {
         this.elem.removeAttribute(name);
-        return this;
+        return this.elem;
     }
-    hasClass(className){
+    hasClass(className):Boolean { 
         return this.elem.classList ? this.elem.classList.contains(className) : new RegExp('(^| )' + className + '( |$)', 'gi').test(this.elem.className);
     }
-    addClass(className: string){
+    addClass(className: string):Utillity {
         if (this.elem.classList) {
             this.elem.classList.add(className);
         } else {
@@ -36,14 +52,14 @@ export class Utillity {
         }
         return this;
     }
-    removeClass(className: string){
+    removeClass(className: string):Utillity {
         if (this.elem.classList)
             this.elem.classList.remove(className);
         else
             this.elem.className = this.elem.className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
         return this;
     }
-    toggleClass(className: string){
+    toggleClass(className: string):Utillity{
         if (this.elem.classList) {
             this.elem.classList.toggle(className);
         } else {
@@ -63,8 +79,56 @@ export class Utillity {
         }
         return this;
     }
-    parent(){
-        this.elem = this.elem.parentElement;
+    // Working with DOM
+    append(elem: Element):Utillity {
+        this.elem.appendChild(elem);
         return this;
     }
+    parent():Utillity{
+        return new Utillity(this.elem.parentElement);
+    }
+    next():Utillity{
+        return new Utillity(this.elem.nextElementSibling);
+    }
+    find(selector: string):any{
+        const elem = this.elem.querySelectorAll(selector);
+        if(elem.length > 1){
+            return Array.prototype.slice.call(elem);
+        }else if(elem.length == 1){
+            return new Utillity(elem[0]);
+        }else{
+            return null;
+        }
+    }
+    children(selector?: string):any {
+        let filtered = Array.prototype.slice.call(this.elem.children);
+        if(selector)
+            filtered = Array.prototype.slice.call(this.elem.querySelectorAll(`:scope > ${selector}`));
+        if (filtered.length > 1) {
+            const res:Array<Utillity> = [];
+            filtered.forEach(item => res.push(new Utillity(item)));
+            return res;
+        } else if (filtered.length == 1) {
+            return new Utillity(filtered[0]);
+        } else {
+            return null;
+        }
+    }
+    clone() {
+        return new Utillity(this.elem.cloneNode(true));
+    }
+    // Event handlers
+    on(event:string, callback:any){
+        this.clickEvent = callback;
+        this.elem.addEventListener(event,this.clickEvent);
+    }
+    off(event){
+        if(event === 'click'){
+            this.elem.removeEventListener(event,this.clickEvent);
+        }
+    }
+}
+
+export function _(selector:any):Utillity{
+    return new Utillity(selector);
 }

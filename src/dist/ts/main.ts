@@ -1,4 +1,3 @@
-import {Utillity} from './utillity.js';
 import {MobileNav} from './mobileNav.js';
 document.addEventListener('DOMContentLoaded',e => {
     // Dom loaded

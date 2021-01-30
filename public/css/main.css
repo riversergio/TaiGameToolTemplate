@@ -234,6 +234,9 @@ button {
   width: 100%;
   font-weight: 300;
 }
+#mobile_search_form button {
+  cursor: pointer;
+}
 
 #mobile-navigation {
   position: fixed;
@@ -297,10 +300,6 @@ button {
   font-size: 12px;
   font-weight: 500;
 }
-#mobile-navigation .nav-container .nav-item.active .nav-link {
-  background-color: #4b7bec;
-  color: #ffffff;
-}
 #mobile-navigation .nav-container .nav-item .nav-item-holder {
   position: absolute;
   bottom: 100%;
@@ -311,8 +310,72 @@ button {
   padding: 0.25rem;
   background-color: #ffffff;
   box-shadow: 0 -5px 5px rgba(0, 0, 0, 0.02);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.25s ease;
+  -moz-transition: all 0.25s ease;
+  -webkit-transition: all 0.25s ease;
+  -ms-transition: all 0.25s ease;
+}
+#mobile-navigation .nav-container .nav-item.active > .nav-link {
+  background-color: #4b7bec;
+  color: #ffffff;
+}
+#mobile-navigation .nav-container .nav-item.active .nav-item-holder {
+  opacity: 1;
+  visibility: visible;
+}
+
+#mobile-menu {
+  position: relative;
+  overflow: hidden;
+}
+#mobile-menu .nav {
+  margin: 0;
+  padding: 0;
+  display: -moz-box;
+  display: -webkit-flex;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  flex-wrap: wrap;
+}
+#mobile-menu .nav .nav-item {
+  flex: 1 calc(100% / 2);
+  padding: 0.5rem 1rem 0.5rem;
+}
+#mobile-menu .nav .nav-item:not(:nth-child(1)):not(:nth-child(2)) {
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+#mobile-menu .nav .nav-item:last-child {
+  border-right: 1px solid rgba(0, 0, 0, 0.05);
+}
+#mobile-menu .nav .nav-item .nav-link {
+  flex-direction: row;
+  -webkit-box-align: center;
+  -moz-box-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+}
+#mobile-menu .nav .nav-item .nav-link i {
+  font-size: 1.75rem;
+}
+#mobile-menu .nav .nav-item .nav-link .name {
+  font-size: 0.95rem;
+  margin-left: 1rem;
+}
+
+#main-menu {
   display: none;
 }
-#mobile-navigation .nav-container .nav-item .nav-item-holder.pullUp, #mobile-navigation .nav-container .nav-item .nav-item-holder.pullDown {
-  display: block;
+@media screen and (min-width: 1024px) and (max-width: 1279px) {
+  #main-menu {
+    display: block;
+  }
+}
+@media screen and (min-width: 1280px) {
+  #main-menu {
+    display: block;
+  }
 }
