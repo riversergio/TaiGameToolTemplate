@@ -42,18 +42,23 @@ export class MobileNav {
                 // If item has ID
                 const button = itemHolder.children('.nav-link');
                 const holder = itemHolder.children('.nav-item-holder');
-                console.log(itemHolder.children())
-                if(holder)
+                if (holder)
                     holder.on('click', e => e.stopPropagation());
                 button.on('click', e => {
-                    e.stopPropagation();
                     const current = _(e.currentTarget).parent();
                     const currentId = current.attr('id');
                     // Toggle State
-                    current.toggleClass('active');
-                    self.reset(currentId);
-                    doc.on('click', self.handleClickOutsideEvent); 
-                }); 
+                    console.log(currentId);
+                    if(currentId !== 'moveToTop'){
+                        e.stopPropagation();
+                        current.toggleClass('active');
+                        self.reset(currentId);
+                        doc.on('click', self.handleClickOutsideEvent);
+                        return false;
+                    }else
+                        current.moveToTop(0,500);
+                    
+                });
             }
         })
     }

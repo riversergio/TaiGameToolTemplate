@@ -41,17 +41,22 @@ var MobileNav = /** @class */ (function () {
                 // If item has ID
                 var button = itemHolder.children('.nav-link');
                 var holder = itemHolder.children('.nav-item-holder');
-                console.log(itemHolder.children());
                 if (holder)
                     holder.on('click', function (e) { return e.stopPropagation(); });
                 button.on('click', function (e) {
-                    e.stopPropagation();
                     var current = _(e.currentTarget).parent();
                     var currentId = current.attr('id');
                     // Toggle State
-                    current.toggleClass('active');
-                    self.reset(currentId);
-                    doc.on('click', self.handleClickOutsideEvent);
+                    console.log(currentId);
+                    if (currentId !== 'moveToTop') {
+                        e.stopPropagation();
+                        current.toggleClass('active');
+                        self.reset(currentId);
+                        doc.on('click', self.handleClickOutsideEvent);
+                        return false;
+                    }
+                    else
+                        current.moveToTop(0, 500);
                 });
             }
         });

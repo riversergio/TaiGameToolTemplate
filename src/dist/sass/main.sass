@@ -26,6 +26,7 @@
 html,body
     margin: 0
     height: 100%
+    scroll-behavior: smooth
 
 body
     font-family: $body_font
@@ -180,6 +181,8 @@ button
             padding: 0.5rem 1rem .5rem
             &:not(:nth-child(1)):not(:nth-child(2))
                 border-top: 1px solid rgba(0,0,0,.05)
+            &:nth-child(2n)
+                border-right: none
             &:last-child
                 border-right: 1px solid rgba(0,0,0,.05)
             .nav-link
