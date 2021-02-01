@@ -1,4 +1,4 @@
-import { _ } from './utillity.js';
+import _ from './utillity.js';
 var MobileNav = /** @class */ (function () {
     function MobileNav(selector) {
         this.element = _(selector).elem;
@@ -34,22 +34,19 @@ var MobileNav = /** @class */ (function () {
         var mainMenu = _('#main-menu').clone().attr('id', 'mobile-menu').attr('class', 'nav-item-holder');
         var toggleMenu = _('#toggleMenu');
         toggleMenu.append(mainMenu.elem);
-        this.items.forEach(function (item) {
-            var itemHolder = _(item);
+        self.items.each(function (index, itemHolder) {
             // console.log(itemHolder);
-            if (itemHolder.attr('id')) {
-                // If item has ID
+            if (itemHolder.attr('id')) { // If item has ID
                 var button = itemHolder.children('.nav-link');
                 var holder = itemHolder.children('.nav-item-holder');
                 if (holder)
                     holder.on('click', function (e) { return e.stopPropagation(); });
                 button.on('click', function (e) {
+                    e.stopPropagation();
                     var current = _(e.currentTarget).parent();
                     var currentId = current.attr('id');
                     // Toggle State
-                    console.log(currentId);
                     if (currentId !== 'moveToTop') {
-                        e.stopPropagation();
                         current.toggleClass('active');
                         self.reset(currentId);
                         doc.on('click', self.handleClickOutsideEvent);
@@ -63,4 +60,4 @@ var MobileNav = /** @class */ (function () {
     };
     return MobileNav;
 }());
-export { MobileNav };
+export default MobileNav;

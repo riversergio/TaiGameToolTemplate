@@ -1,7 +1,11 @@
-import { MobileNav } from './mobileNav.js';
+import _ from './utillity.js';
+import MobileNav from './mobileNav.js';
 document.addEventListener('DOMContentLoaded', function (e) {
     // Dom loaded
     var mobileBottomNav = new MobileNav('#mobile-navigation');
-    var searchToggleBtn = document.querySelector('#toggleSearch');
+    var featuredAppSlider = _('.featured-app-slider');
+    // @ts-ignore
+    featuredAppSlider.initSlider();
+    // searchToggleBtn.wrapAll('div');
     mobileBottomNav.init();
 });

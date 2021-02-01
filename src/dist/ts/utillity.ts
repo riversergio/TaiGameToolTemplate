@@ -1,13 +1,25 @@
 class Utillity {
     static selectedElements: Array<Utillity> = []; // Store all of selected elements
-    elem: any; // Object element
+    elem: Element; // Object element
+    elems: Array<Element>; // Array of object elements
     clickEvent: any; // Click Event Store
     constructor(elem: any){
         let flag:Boolean = false; // Flag for checking if the next element is exist or not
-        let selectedObj:Object = {
-            elem: typeof elem === 'string' ? document.querySelector(elem) : elem,
-            clickEvent: null
-        }; // Default value
+        let selectedObj:Object = {clickEvent: null}; // Default value
+        if(typeof elem === 'string'){
+            const selectedElements = document.querySelectorAll(elem);
+            if(selectedElements.length > 1)
+                selectedObj["elems"] = selectedElements;
+            else
+                selectedObj["elem"] = selectedElements[0];
+        }else
+            if (elem.length)
+                if(elem.length > 1)
+                    selectedObj["elems"] = elem;
+                else
+                    selectedObj["elem"] = elem;
+            else
+                selectedObj["elem"] = elem;
         Utillity.selectedElements.forEach(selected => {
             if ((selected.elem === elem) && (selected.elem.innerHTML === elem.innerHTML)){
                 for (let key in selectedObj) this[key] = selected[key];
@@ -24,16 +36,14 @@ class Utillity {
     // Methods
     // Working with element attributes
     attr(name:string, value?: string):any {
-        if(!value){
+        if(!value)
             return this.elem.getAttribute(name);
-        }else{
-            this.elem.setAttribute(name, value);
-            return this;
-        }
+        this.elem.setAttribute(name, value);
+        return this;
     }
     removeAttr(name:string):Utillity {
         this.elem.removeAttribute(name);
-        return this.elem;
+        return this;
     }
     hasClass(className):Boolean { 
         return this.elem.classList ? this.elem.classList.contains(className) : new RegExp('(^| )' + className + '( |$)', 'gi').test(this.elem.className);
@@ -92,30 +102,55 @@ class Utillity {
     }
     find(selector: string):any{
         const elem = this.elem.querySelectorAll(selector);
-        if(elem.length > 1){
-            return Array.prototype.slice.call(elem);
-        }else if(elem.length == 1){
+        if(elem.length > 1)
+            return new Utillity(Array.prototype.slice.call(elem));
+        else if(elem.length == 1)
             return new Utillity(elem[0]);
-        }else{
-            return null;
-        }
+        else
+            return new Utillity([]);
     }
     children(selector?: string):any {
-        let filtered = Array.prototype.slice.call(this.elem.children);
-        if(selector)
-            filtered = Array.prototype.slice.call(this.elem.querySelectorAll(`:scope > ${selector}`));
-        if (filtered.length > 1) {
-            const res:Array<Utillity> = [];
-            filtered.forEach(item => res.push(new Utillity(item)));
-            return res;
-        } else if (filtered.length == 1) {
-            return new Utillity(filtered[0]);
-        } else {
-            return null;
+        const list = selector ? Array.prototype.slice.call(this.elem.querySelectorAll(`:scope>${selector}`)) : Array.prototype.slice.call(this.elem.children);
+        if(!list.length)
+            console.warn("Can't find "+ selector +" for "+ this.elem.tagName.toLowerCase() + (this.elem.id ? `#${this.elem.id}` : `.${this.elem.className}`));
+        else{
+            if(list.length > 1)
+                return new Utillity(list);
+            else
+                return new Utillity(list[0]);
         }
     }
-    clone() {
+    clone():Utillity {
         return new Utillity(this.elem.cloneNode(true));
+    }
+    html(content?:string):any {
+        if(!content) return this.elem.innerHTML;
+        else this.elem.innerHTML = content;
+    }
+    outHtml():string {
+        return this.elem.outerHTML;
+    }
+    wrap(tag:string,options?:object) {
+        let elem = `<${tag}`;
+        if(options)
+            for(let attr in options)
+                elem+=` ${attr}='${options[attr]}'`;
+        elem+=`>${this.elem.outerHTML}</${tag}>`;
+        this.elem.outerHTML = elem;
+        return this;
+    }
+    wrapAll(tag:string,options?:object):Utillity {
+        if (typeof this.elems === 'undefined') throw new Error('The selector must be an array');
+        if(!tag) throw new Error("Please add a wrap tag");
+        const wrapElement = new Utillity(document.createElement(tag));
+        if (options)
+            for (let attr in options)
+                wrapElement.attr(attr, options[attr]);
+        const lastElement = new Utillity(this.elems[this.elems.length - 1]);
+        const parentElement = lastElement.parent();
+        this.elems.forEach((elem, index) => wrapElement.append(elem));
+        parentElement.html(wrapElement.outHtml());
+        return this;
     }
     // Event handlers
     on(event:string, callback:any){
@@ -126,6 +161,11 @@ class Utillity {
         if(event === 'click'){
             this.elem.removeEventListener(event,this.clickEvent);
         }
+    }
+    each(callback:Function){
+        if (typeof this.elems === 'undefined') throw new Error('The selector must be an array');
+        if (!callback) throw new Error("Please add a callback function for each loop");
+        Array.prototype.forEach.call(this.elems, (elem, index) => callback(index, new Utillity(elem)));
     }
     moveToTop(to,duration){
         const
@@ -156,8 +196,27 @@ class Utillity {
             };
         animateScroll();
     }
+    // slider
+    initSlider(options?: object){
+        const sliderItems = new Utillity(this.elem).children(), listSelector = 'splide__list', trackSelector = 'splide__track';
+        // Return the element to standard slider layout
+        sliderItems.each((i,el) => {
+            el.addClass(`splide__slide`).addClass(`splide__slide-${i+1}`);
+        });
+        sliderItems.wrapAll('div',{
+            class: listSelector
+        });
+        const splideList = new Utillity(this.elem).find('.'+listSelector);
+        splideList.wrap('div',{
+            class: trackSelector
+        });
+        // Initial
+        new Utillity(this.elem).addClass('splide');
+        // @ts-ignore
+        new Splide(this.elem).mount();
+    }
 }
 
-export function _(selector:any):Utillity{
+export default function _(selector:any):Utillity{
     return new Utillity(selector);
 }
